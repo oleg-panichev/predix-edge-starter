@@ -1,0 +1,3 @@
+[submodule "predix-machine-templates"]
+	path = predix-machine-templates
+	url = git@github.build.ge.com:adoption/predix-machine-templates.git
