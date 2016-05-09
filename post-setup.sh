@@ -20,7 +20,7 @@ then
 	rm -rf $quickstartRootDir/PredixMachineContainer.zip
 	if zip -r $quickstartRootDir/PredixMachineContainer.zip $PREDIXMACHINEHOME > zipoutput.log; then
 		__append_new_line_log "Zipped up the configured Predix Machine and storing in $quickstartRootDir/PredixMachineContainer.zip" "$quickstartRootDir"
-		#scp $quickstartRootDir/PredixMachineContainer.zip $TARGETDEVICEUSER@$TARGETDEVICEIP:PredixMachineContainer.zip
+		scp $quickstartRootDir/PredixMachineContainer.zip $TARGETDEVICEUSER@$TARGETDEVICEIP:PredixMachineContainer.zip
 	else
 		__error_exit "Failed to zip up PredixMachine_16.1.0" "$quickstartRootDir"
 	fi
