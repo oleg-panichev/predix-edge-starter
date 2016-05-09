@@ -18,7 +18,7 @@ trap "trap_ctrlc" 2
 
 PROGNAME=$(basename $0)
 GIT_FRONT_END_FILENAME="predix-nodejs-starter"
-GIT_BRANCH_RASPBERRY_PI="merge_with_master"
+GIT_BRANCH_ADAPTER="merge_with_master"
 BUILD_APP_TEXTFILE="build-basic-app-summary.txt"
 
 
@@ -46,12 +46,12 @@ fi
 
 if git clone "$1" "$GIT_FRONT_END_FILENAME"; then
 	cd "$GIT_FRONT_END_FILENAME"
-	#if git checkout "$GIT_BRANCH_RASPBERRY_PI"; then
-		echo "Successfully cloned \"$GIT_FRONT_END_FILENAME\" and checkout the branch \"$GIT_BRANCH_RASPBERRY_PI\""
-	#else
-	#	cd ..
-	#	__error_exit "There was an error checking out the branch \"$GIT_BRANCH_RASPBERRY_PI\"" "$buildBasicAppRootDir/.."
-	#fi
+	if git checkout "$GIT_BRANCH_ADAPTER"; then
+		echo "Successfully cloned \"$GIT_FRONT_END_FILENAME\" and checkout the branch \"$GIT_BRANCH_ADAPTER\""
+	else
+		cd ..
+		__error_exit "There was an error checking out the branch \"$GIT_BRANCH_ADAPTER\"" "$buildBasicAppRootDir/.."
+	fi
 else
 	__error_exit "There was an error cloning the repo \"$GIT_FRONT_END_FILENAME\". Be sure to have permissions to the repo, or SSH keys created for your account" "$buildBasicAppRootDir/.."
 fi
