@@ -46,12 +46,12 @@ fi
 
 if git clone "$1" "$GIT_FRONT_END_FILENAME"; then
 	cd "$GIT_FRONT_END_FILENAME"
-	if git checkout "$GIT_BRANCH_RASPBERRY_PI"; then
+	#if git checkout "$GIT_BRANCH_RASPBERRY_PI"; then
 		echo "Successfully cloned \"$GIT_FRONT_END_FILENAME\" and checkout the branch \"$GIT_BRANCH_RASPBERRY_PI\""
-	else
-		cd ..
-		__error_exit "There was an error checking out the branch \"$GIT_BRANCH_RASPBERRY_PI\"" "$buildBasicAppRootDir/.."
-	fi
+	#else
+	#	cd ..
+	#	__error_exit "There was an error checking out the branch \"$GIT_BRANCH_RASPBERRY_PI\"" "$buildBasicAppRootDir/.."
+	#fi
 else
 	__error_exit "There was an error cloning the repo \"$GIT_FRONT_END_FILENAME\". Be sure to have permissions to the repo, or SSH keys created for your account" "$buildBasicAppRootDir/.."
 fi
