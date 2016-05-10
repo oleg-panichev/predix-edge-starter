@@ -1,13 +1,6 @@
 #!/bin/sh
 PROCESSOR=x86_64
 
-# GE Modified
-if [ `uname -m` = "armv6l" ]; then
-    PROCESSOR=arm_raspbian
-else
-    PROCESSOR=x86_64
-fi
-
 # mbsa trap cleanup funtion
 cleanup()
 {

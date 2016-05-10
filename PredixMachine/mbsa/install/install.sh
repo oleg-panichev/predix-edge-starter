@@ -6,13 +6,29 @@
 # with the terms and conditions stipulated in the agreement/contract
 # under which the software has been supplied.
 
-# Method to write to the console output as well as a log file
+# This install script will be called by yeti which will provide three arguements
+# The first argument is the Predix Home directory which is the directory to the 
+# Predix Machine container
+# The second arguement is the path to the mbsa directory.  This contains 
+# the new mbsa application to be installed.
+# The third arguement is the name of the zip.  This must be used to create
+# the JSON file to verify the status of the installation.  The JSON must be
+# placed in the appdata/airsync directory with the name $ZIPNAME.json
+
+# Updating the mbsa application proceeds as follows:
+# 1. Make a backup of previous mbsa application
+# 2. Add new mbsa application
+# 3. Return an error code or 0 for success
+
+status="failure"
+errorcode="1"
+message="Installation failed unexpectedly."
+
 writeConsoleLog () {
 	echo "$(date +"%m/%d/%y %H:%M:%S") $1"
 	echo "$(date +"%m/%d/%y %H:%M:%S") $1" >> "$LOG"
 }
 
-# Stops the mbsa process and shuts down the container
 killmbsa () {
 	sh "$PREDIXHOME/mbsa/bin/mbsa_stop.sh" >> "$LOG" 2>&1 || code=$?
 	if [ -z "$code" ] || [ $code -eq 0 ]; then
@@ -31,7 +47,6 @@ killmbsa () {
 	done
 }
 
-# A trap method that's called on install completion.  Writes the status file
 finish () {
 	writeConsoleLog "$message"
 	if [ $errorcode -eq 0 ]; then
@@ -44,114 +59,68 @@ finish () {
 }
 trap finish EXIT
 
-rollback () {
-	directory=$1
-	writeConsoleLog "Update unsuccessful. Attempting to rollback."
-	if [ -d "$PREDIXHOME/$directory" ]; then
-		rm -r "$PREDIXHOME/$directory/">>"$LOG" 2>&1
-	fi
-	mv "$PREDIXHOME/$directory.old/" "$PREDIXHOME/$directory/">>"$LOG" 2>&1
-	if [ $? -eq 0 ]; then
-		writeConsoleLog "Rollback successful."
-	else
-		writeConsoleLog "Rollback unsuccessful."
-	fi
-}
 
-# Performs the application install.  Uses the $application environmental variable set to determine the application to update
-applicationInstall () {
-	# Shutdown container for update
-	echo "$(date +"%m/%d/%y %H:%M:%S") ##########################################################################">> "$LOG"
-	echo "$(date +"%m/%d/%y %H:%M:%S") #                 Shutting down container for update                     #">> "$LOG"
-	echo "$(date +"%m/%d/%y %H:%M:%S") ##########################################################################">> "$LOG"
-	killmbsa
-	while ps aux | grep mbsae.core | grep -v grep > /dev/null; do
-		writeConsoleLog "Error exiting mBSA processes, will try again in 1 minute"
-		sleep 60
-	done
-
-	writeConsoleLog "Updating the $application directory."
-	if [ -d "$PREDIXHOME/$application" ]; then
-		writeConsoleLog "Updating $application application. Backup of current application stored in $application.old."
-		if [ -d "$PREDIXHOME/$application.old" ]; then
-			writeConsoleLog "Updating $application.old application backup to revision before this update."
-			rm -r "$PREDIXHOME/$application.old/">>"$LOG" 2>&1
-			if [ $? -eq 0 ]; then
-				writeConsoleLog "Previous $application.old removed."
-			else
-				message="Previous $application.old could not be removed."
-				errorcode="1"
-				status="failure"
-				exit 1
-			fi
-		fi
-		mv "$PREDIXHOME/$application/" "$PREDIXHOME/$application.old/">>"$LOG" 2>&1
-		if [ $? -eq 0 ]; then
-			writeConsoleLog "The $application application backup created as $application.old."
-		else
-			message="The $application application could not be renamed to $application.old."
-			errorcode="2"
-			status="failure"
-			exit 2
-		fi
-	fi
-	mv "$UPDATEDIR/$application/" "$PREDIXHOME/$application/">>"$LOG" 2>&1
-
-	if [ $? -eq 0 ]; then
-		chmod +x "$PREDIXHOME/machine/bin/predix/predixmachine"
-		chmod +x "$PREDIXHOME/mbsa/bin/mbsa_start.sh"
-		chmod +x "$PREDIXHOME/mbsa/bin/mbsa_stop.sh"
-		chmod +x "$PREDIXHOME/mbsa/bin/network_monitor.sh"
-		if [ -f "$PREDIXHOME/mbsa/lib/runtimes/macosx/x86_64/mbsae.core" ]; then
-			chmod +x "$PREDIXHOME/mbsa/lib/runtimes/macosx/x86_64/mbsae.core"
-		fi
-		if [ -f "$PREDIXHOME/mbsa/lib/runtimes/linux/x86_64/mbsae.core" ]; then
-			chmod +x "$PREDIXHOME/mbsa/lib/runtimes/linux/x86_64/mbsae.core"
-		fi
-		if [ -f "$PREDIXHOME/mbsa/lib/runtimes/linux/linux_arm_raspbian/mbsae.core" ]; then
-			chmod +x "$PREDIXHOME/mbsa/lib/runtimes/linux/linux_arm_raspbian/mbsae.core"
-		fi
-		message="The $application application was updated successfully."
-		errorcode="0"
-		status="success"
-		exit 0
-	else
-		message="The $application application could not be updated."
-		errorcode="3"
-		status="failure"
-		# Attempt a rollback
-		rollback "$application"
-		exit 3
-	fi
-}
-
-# This is the status that will be written if the script exits unexpectedly
-status="failure"
-errorcode="1"
-message="Installation failed unexpectedly."
-
-# This install script will be called by yeti which will provide three arguements
-# The first argument is the Predix Home directory which is the directory to the 
-# Predix Machine container
-# The second arguement is the path to the application directory.  This contains 
-# the new application to be installed.
-# The third arguement is the name of the zip.  This must be used to create
-# the JSON file to verify the status of the installation.  The JSON must be
-# placed in the appdata/airsync directory with the name $ZIPNAME.json
-
-# Updating the application proceeds as follows:
-# 1. Make a backup of previous application
-# 2. Add new application
-# 3. Return an error code or 0 for success
 PREDIXHOME=$1
-UPDATEDIR=$2
+MBSA=$2
 ZIPNAME=$3
 DATE=`date +%m%d%y%H%M%S`
-# Replace this with the name of your application directory
-application=mbsa
-LOG=$PREDIXHOME/logs/installations/install_$application${DATE}.txt
+LOG=$PREDIXHOME/logs/installations/install_mbsa${DATE}.txt
 AIRSYNC=$PREDIXHOME/appdata/airsync
-# Update the $application application by removing any old backups, renaming the
-# current installed application to $application.old, and adding the updated
+# Update the mbsa application by removing any old backups, renaming the
+# current installed application to mbsa.old, and adding the updated mbsa
 # application
-applicationInstall
+
+# Shutdown container for update
+echo "$(date +"%m/%d/%y %H:%M:%S") ##########################################################################">> "$LOG"
+echo "$(date +"%m/%d/%y %H:%M:%S") #                 Shutting down container for update                     #">> "$LOG"
+echo "$(date +"%m/%d/%y %H:%M:%S") ##########################################################################">> "$LOG"
+killmbsa
+while ps aux | grep mbsae.core | grep -v grep > /dev/null; do
+	writeConsoleLog "Error exiting mBSA processes, will try again in 1 minute"
+	sleep 60
+done
+
+writeConsoleLog "Updating the mbsa directory."
+if [ -d "$PREDIXHOME/mbsa" ]; then
+	writeConsoleLog "Updating mbsa application. Backup of current application stored in mbsa.old"
+	if [ -d "$PREDIXHOME/mbsa.old" ]; then
+		writeConsoleLog "Updating mbsa.old application backup to revision before this update"
+		rm -r "$PREDIXHOME/mbsa.old/">>"$LOG" 2>&1
+		if [ $? -eq 0 ]; then
+			writeConsoleLog "Previous mbsa.old removed"
+		else
+			message="Previous mbsa.old could not be removed."
+			errorcode="1"
+			status="failure"
+			exit 1
+		fi
+	fi
+	mv "$PREDIXHOME/mbsa/" "$PREDIXHOME/mbsa.old/">>"$LOG" 2>&1
+	if [ $? -eq 0 ]; then
+		writeConsoleLog "The mbsa application backup created as mbsa.old"
+	else
+		message="The mbsa application could not be renamed to mbsa.old."
+		errorcode="2"
+		status="failure"
+		exit 2
+	fi
+fi
+mv "$MBSA/mbsa/" "$PREDIXHOME/mbsa/">>"$LOG" 2>&1
+
+if [ $? -eq 0 ]; then
+	chmod +x "$PREDIXHOME/mbsa/bin/mbsa_start.sh"
+	chmod +x "$PREDIXHOME/mbsa/bin/mbsa_stop.sh"
+	chmod +x "$PREDIXHOME/mbsa/bin/network_monitor.sh"
+	chmod +x "$PREDIXHOME/mbsa/lib/runtimes/macosx/x86_64/mbsae.core"
+	chmod +x "$PREDIXHOME/mbsa/lib/runtimes/linux/x86_64/mbsae.core"
+	chmod +x "$PREDIXHOME/mbsa/lib/runtimes/linux/linux_arm_raspbian/mbsae.core"
+	message="Mbsa application updated"
+	errorcode="0"
+	status="success"
+	exit 0
+else
+	message="Mbsa application could not be updated."
+	errorcode="3"
+	status="failure"
+	exit 3
+fi

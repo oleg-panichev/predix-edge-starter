@@ -13,7 +13,7 @@ ALL_PROXY=""
 ############## Front End Configurations #############
 
 # Name for your Predix Cloud Front End Application - must be unique across whole cloud
-FRONT_END_APP_NAME="predix-nodejs-starter-turnerth"
+FRONT_END_APP_NAME="predix-nodejs-starter-<your-name-here>"
 
 ########### Predix Cloud (CF) Configurations ###########
 
@@ -21,13 +21,13 @@ FRONT_END_APP_NAME="predix-nodejs-starter-turnerth"
 CF_HOST="api.system.aws-usw02-pr.ice.predix.io"
 
 # Predix Cloud Organization
-CF_ORG="turnerth@ge.com"
+CF_ORG="your.predix.io.login@mycompany.com"
 
 # Could Foundry Space - default already set
 CF_SPACE="dev"
 
 # Predix.io Username
-CF_USERNAME="turnerth@ge.com"
+CF_USERNAME="your.predix.io.login@mycompany.com"
 
 ############### UAA Configurations ###############
 # The name of the UAA service you are binding to - default already set
@@ -105,7 +105,7 @@ ASSET_INSTANCE_NAME="dev-asset-instance"
 TARGETDEVICE="edison"
 
 #Target Device IP, at command line on device, use ifconfig to get ip adress
-TARGETDEVICEIP="192.168.1.67"
+TARGETDEVICEIP="192.168.1.229"
 
 #Target Device User
 TARGETDEVICEUSER="root"
