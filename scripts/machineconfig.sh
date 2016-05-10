@@ -6,8 +6,12 @@
 # Timeseries_zone_id
 # uri_under_predix_uaa
 
-quickstartRootDir=$(dirname $0)
-source $quickstartRootDir/variables.sh
+scriptRootDir=$(dirname $0)
+source $scriptRootDir/variables.sh
+source $scriptRootDir/files_helper_funcs.sh
+pathFromCallingScript=$1
+trustedIssuerID=$2
+PREDIXMACHINEHOME=PredixMachine
 
 # Sets a property value in the provided config file
 # Arguments:
@@ -16,20 +20,26 @@ source $quickstartRootDir/variables.sh
 #  $3 the value of the property
 set_property()
 {
-    sed -i '' -e "s;\($2 *= *\).*;\1$3;g" "$1"
+    #sed -i '' -e "s;\($2 *= *\).*;\1$3;g" "$1"
+    __find_and_replace ".*$2.*"   "$2=\"$3\""     "$1" "$scriptRootDir/.."
 }
 
 ASSET_TYPE="$(echo -e "${ASSET_TYPE}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
 ASSET_TYPE_NOSPACE=${ASSET_TYPE// /_}
 ASSET_TAG="$(echo -e "${ASSET_TAG}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-ASSET_TAG_NOSPACE=${ASSET_TAG// /_}
+ASSET_TAG_NOSPACE=${SSET_TAG// /_}
 
-echo "UAA Url : $1"
-set_property $quickstartRootDir/../$PREDIXMACHINEHOME/configuration/machine/com.ge.dspmicro.predixcloud.identity.config "com.ge.dspmicro.predixcloud.identity.uaa.token.url" \"$1\"
+echo "pathFromCallingScript=$pathFromCallingScript"
+echo "trustedIssuerID=$trustedIssuerID"
+echo "PredixMachineHome=$PREDIXMACHINEHOME"
+echo "scriptRootDir=$scriptRootDir"
+pwd
 
-set_property $quickstartRootDir/../$PREDIXMACHINEHOME/configuration/machine/com.ge.dspmicro.predixcloud.identity.config "com.ge.dspmicro.predixcloud.identity.uaa.clientid" \"$UAA_CLIENTID_GENERIC\"
+set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/com.ge.dspmicro.predixcloud.identity.config "com.ge.dspmicro.predixcloud.identity.uaa.token.url" $trustedIssuerID
 
-set_property $quickstartRootDir/../$PREDIXMACHINEHOME/configuration/machine/com.ge.dspmicro.predixcloud.identity.config "com.ge.dspmicro.predixcloud.identity.uaa.clientsecret" \"$UAA_CLIENTID_GENERIC_SECRET\"
+set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/com.ge.dspmicro.predixcloud.identity.config "com.ge.dspmicro.predixcloud.identity.uaa.clientid" $UAA_CLIENTID_GENERIC
+
+set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/com.ge.dspmicro.predixcloud.identity.config "com.ge.dspmicro.predixcloud.identity.uaa.clientsecret" $UAA_CLIENTID_GENERIC_SECRET
 
 
 #sed "s#com.ge.dspmicro.predixcloud.identity.oauth.authorize.url=.*#com.ge.dspmicro.predixcloud.identity.oauth.authorize.url=\"$4\"#" com.ge.dspmicro.predixcloud.identity.config > com.ge.dspmicro.predixcloud.identity.config.tmp
@@ -37,7 +47,7 @@ set_property $quickstartRootDir/../$PREDIXMACHINEHOME/configuration/machine/com.
 
 #sed "s#com.ge.dspmicro.predixcloud.identity.uaa.enroll.url=.*#com.ge.dspmicro.predixcloud.identity.uaa.enroll.url=\"$1\"#" com.ge.dspmicro.predixcloud.identity.config > com.ge.dspmicro.predixcloud.identity.config.tmp
 #mv com.ge.dspmicro.predixcloud.identity.config.tmp com.ge.dspmicro.predixcloud.identity.config
-websocket_config_file="$quickstartRootDir/../$PREDIXMACHINEHOME/configuration/machine/com.ge.dspmicro.websocketriver.send-0.config"
+websocket_config_file="$scriptRootDir/../$PREDIXMACHINEHOME/configuration/machine/com.ge.dspmicro.websocketriver.send-0.config"
 echo "Updating websocket river parameters in $websocket_config_file"
 websocket_headervalue_prop="com.ge.dspmicro.websocketriver.send.header.zone.value"
 set_property $websocket_config_file $websocket_headervalue_prop \"$3\"
@@ -63,10 +73,10 @@ else
 	myProxyEnabled="false"
 fi
 
-set_property $quickstartRootDir/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.host" \"$myProxyHostValue\"
+set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.host" \"$myProxyHostValue\"
 
-set_property $quickstartRootDir/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.port" \"$myProxyPortValue\"
+set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.port" \"$myProxyPortValue\"
 
-set_property $quickstartRootDir/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.enabled" B\"$myProxyEnabled\"
+set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.enabled" B\"$myProxyEnabled\"
 
 echo "Predix Machine configuration update complete"

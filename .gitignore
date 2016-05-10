@@ -1,0 +1,9 @@
+echine/configuration/machine/com.ge.predix.solsvc.workshop.adapter.config
+PredixMachine/configuration/machine/com.ge.predix.workshop.nodeconfig.json
+PredixMachine/machine/bin/vms/solution.ini
+PredixMachine/machine/bundles/predix-machine-template-adapter-edison-1.0.jar
+PredixMachineContainer.zip
+config.txt
+quickstartlog.log
+zipoutput.log
+PredixMachine/configuration/machine/com.ge.predix.solsvc.workshop.adapter.config

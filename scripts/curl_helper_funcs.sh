@@ -139,3 +139,19 @@ function __addUaaUser
     fi
   fi
 }
+
+#	----------------------------------------------------------------
+#	Function for seeing if a cloud found app exists
+#		Accepts 1 argument:
+#			string of the app search for
+#	----------------------------------------------------------------
+function __does_app_exist
+{
+	__validate_num_arguments 1 $# "\"__append_new_line()\" expected in order: String of the app searching for" "$CURL_HELPER_LOG_PATH"
+	echo -e `cf a | grep $1 | wc -l`
+}
+
+#Creating a timestamp for logging
+timestamp() {
+  date +"%Y-%m-%d  %H:%M:%S"
+}

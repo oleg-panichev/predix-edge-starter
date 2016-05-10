@@ -14,6 +14,7 @@ source "$buildBasicAppRootDir/variables.sh"
 source "$buildBasicAppRootDir/error_handling_funcs.sh"
 source "$buildBasicAppRootDir/files_helper_funcs.sh"
 
+
 trap "trap_ctrlc" 2
 
 PROGNAME=$(basename $0)
@@ -76,19 +77,20 @@ __find_and_replace "\#assetMachine: .*" "assetMachine: $9" "manifest.yml" "$buil
 __find_and_replace "\#tagname: .*" "tagname: ${10}" "manifest.yml" "$buildBasicAppRootDir/.."
 
 # Edit the applications config.json file
-
-__find_and_replace ".*uaaUri\":.*" "    \"uaaURL\": \"$5\"," "config.json" "$buildBasicAppRootDir/.."
-__find_and_replace ".*timeseries_zone\":.*" "    \"timeseries_zone\": \"$7\"" "config.json" "$buildBasicAppRootDir/.."
-__find_and_replace ".*assetZoneId\":.*" "    \"assetZoneId\": \"${11}\"," "config.json" "$buildBasicAppRootDir/.."
-__find_and_replace ".*tagname\":.*" "    \"tagname\": \"${10}\"," "config.json" "$buildBasicAppRootDir/.."
-__find_and_replace ".*clientId\":.*" "    \"clientId\": \"$3\"," "config.json" "$buildBasicAppRootDir/.."
+pwd
+#cat config.json
+__find_and_replace ".*uaaUri\":.*" "                    \"uaaURL\": \"$5\","                 "config.json" "$buildBasicAppRootDir/.."
+__find_and_replace ".*timeseries_zone\":.*" "           \"timeseries_zone\": \"$7\","         "config.json" "$buildBasicAppRootDir/.."
+__find_and_replace ".*assetZoneId\":.*" "               \"assetZoneId\": \"${11}\","         "config.json" "$buildBasicAppRootDir/.."
+__find_and_replace ".*tagname\":.*" "                   \"tagname\": \"${10}\","             "config.json" "$buildBasicAppRootDir/.."
+__find_and_replace ".*clientId\":.*" "                  \"clientId\": \"$3\","               "config.json" "$buildBasicAppRootDir/.."
 __find_and_replace ".*base64ClientCredential\":.*" "    \"base64ClientCredential\": \"$4\"," "config.json" "$buildBasicAppRootDir/.."
 
 # Add the required Timeseries and Asset URIs
-__find_and_append_new_line ".*\"windServiceUrl\":.*" "    timeseriesURL: $6," "config.json" "$buildBasicAppRootDir/.."
-__find_and_append_new_line ".*\"windServiceUrl\":.*" "    assetURL: $8/$9," "config.json" "$buildBasicAppRootDir/.."
-__find_and_replace "    timeseriesURL: $6," "    \"timeseriesURL\": \"$6\"," "config.json" "$buildBasicAppRootDir/.."
-__find_and_replace "    assetURL: $8/$9," "    \"assetURL\": \"$8/$9\"," "config.json" "$buildBasicAppRootDir/.."
+__find_and_replace ".*timeseriesUrl\":.*" "             \"timeseriesUrl\": \"$6\","          "config.json" "$buildBasicAppRootDir/.."
+__find_and_replace ".*assetUrl\":.*" "                  \"assetUrl\": \"$8/$9\","            "config.json" "$buildBasicAppRootDir/.."
+#__find_and_replace ".*windServiceUrl\":.*" "           \"windServiceUrl\": \"$TBD\""            "config.json" "$buildBasicAppRootDir/.."
+cat config.json
 
 # Edit the /public/secure.html file
 cd public
@@ -97,7 +99,6 @@ __find_and_replace "-->" "" "secure.html" "$buildBasicAppRootDir/.."
 cd ..
 
 # Build the application
-
 echo "Building the application \"$2\"..."
 if npm install; then
 	echo "Succesfully built!"
