@@ -28,10 +28,8 @@ REMOVE THIS LINE -->
         <DataSubscriptionConfig>
                 <Name>OPCUA_Subscription_1</Name>    
                 <PublishingInterval>1000</PublishingInterval>
-                <DataChangeFilter trigger="StatusValue" deadbandType="Absolute" deadbandValue="1.0"/>
                 <DataNode>
                         <Name>Node 1</Name>
-		                <DataChangeFilter trigger="StatusValue" deadbandType="Absolute" deadbandValue="2.0"/>
                 </DataNode>
                 <DataNode>
                         <Name>Node 2</Name>

@@ -26,8 +26,7 @@ mbs.manager.fwnotify.waittime = 5
 
 # Base directory, containing mbsa/, machine/ and persistent update storage (in case of machine updates)
 # if empty, UM does not check for required dirs...
-# GE Change from Prosyst - this creates update_storage not used by Machine.
-#mbs.manager.update.dir = ../..
+mbs.manager.update.dir = ../..
 
 # Current JVM dir, if empty JVM Update is disabled!
 mbs.manager.update.jvm.dir=

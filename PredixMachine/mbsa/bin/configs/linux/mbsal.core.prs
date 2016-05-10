@@ -1,5 +1,5 @@
 # Directory where are the plugins libraries
-core.plugins.dir=../../lib/mbsa/runtimes/linux/linux_x86_64/plugins
+core.plugins.dir=../../lib/mbsa/runtimes/linux/x86_64/plugins
 
 ### <mbsa-default-plugins>
 # Autostart list

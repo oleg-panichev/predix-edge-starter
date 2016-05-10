@@ -66,7 +66,7 @@ EXTPRS="../../../../configuration/machine/predix.prs;../../predix/predix.home.pr
 MBS_SERVER_JAR="../../../lib/framework/com.prosyst.util.log.buffer.jar"
 VM_ARGS="-Dmbs.log.custom=com.prosyst.util.log.buffer.BufferedLogger -Dmbs.log.useEventThread=false -Dmbs.log.file.entriesThreshold=0"
 # turn on java security permissions in ../machine/bin/vms/policy.all. Comment out the line to turn it off.
-#FWSECURITY=on
+FWSECURITY=on
 
 # Add javax.servlet-api if it exists.
 if [ -e "$PREDIX_MACHINE_HOME/machine/bundles/javax.servlet-api-3.1.0.jar" ]; then 
@@ -165,12 +165,7 @@ cd "$PREDIX_MACHINE_HOME/machine/bin/vms/jdk/"
 #  $3 the value of the property
 set_property()
 {
-    if test `uname` = 'Darwin'; then
-    	# Mac needs the blank backup specified. Linux issue warnings if specified.
-		sed -i '' -e "s;\($2 *= *\).*;\1$3;g" "$1"
-	else
-		sed -i -e "s;\($2 *= *\).*;\1$3;g" "$1"
-    fi
+    sed -i '' -e "s;\($2 *= *\).*;\1$3;g" "$1"
 }
 
 # Sets a property value in the provided config file
@@ -180,11 +175,7 @@ set_property()
 #  $3 the value of the property
 set_property_opc()
 {
-    if test `uname` = 'Darwin'; then
-		sed -i '' -e "s;\($2 *= *\).*;\1$3;g" "$PREDIX_MACHINE_HOME"/$1
-	else
-		sed -i -e "s;\($2 *= *\).*;\1$3;g" "$PREDIX_MACHINE_HOME"/$1
-    fi
+    sed -i '' -e "s;\($2 *= *\).*;\1$3;g" "$PREDIX_MACHINE_HOME"/$1
 }
 
 # Generates a random password of custom length using /dev/urandom
@@ -224,10 +215,10 @@ TLS_SERVER_KEYSTORE_PW_PROP=com.ge.dspmicro.securityadmin.sslcontext.server.keys
 TLS_SERVER_KEYSTORE_KEY_PW_PROP=com.ge.dspmicro.securityadmin.sslcontext.server.keymanager.password
 TLS_SERVER_KEYSTORE_KEY_ALIAS_PROP=com.ge.dspmicro.securityadmin.sslcontext.server.keymanager.alias
 
-if [ -e "$PREDIX_MACHINE_HOME/machine/bundles/com.ge.dspmicro.machineadapter-opcua-16.2.0-SNAPSHOT.jar" ]; then
+if [ -e "$PREDIX_MACHINE_HOME/machine/bundles/com.ge.dspmicro.machineadapter-opcua-16.1.1.jar" ]; then
     OPCUA_KEYSTORE_PATH=security/opcua_keystore.jks
 fi
-if [ -e "$PREDIX_MACHINE_HOME/machine/bundles/com.ge.dspmicro.opcua-server-16.2.0-SNAPSHOT.jar" ]; then
+if [ -e "$PREDIX_MACHINE_HOME/machine/bundles/com.ge.dspmicro.opcua-server-16.1.1.jar" ]; then
     OPCUA_SERVER_KEYSTORE_PATH=security/opcuaserver_keystore.jks
 fi
 
@@ -341,7 +332,7 @@ if [ "$VALUE_IS_SET" = false ]; then
 fi
 
 # Setup keystore for OPC-UA key storage only if OPC-UA bundle is present
-if [ -e "$PREDIX_MACHINE_HOME/machine/bundles/com.ge.dspmicro.machineadapter-opcua-16.2.0-SNAPSHOT.jar" ]; then
+if [ -e "$PREDIX_MACHINE_HOME/machine/bundles/com.ge.dspmicro.machineadapter-opcua-16.1.1.jar" ]; then
     if [ ! -e "$PREDIX_MACHINE_HOME/$OPCUA_KEYSTORE_PATH" ]; then
         echo "Default OPC-UA keystore not found, generating a new one. WARNING: This may take several minutes on small devices"
         # We do no generate the password since it must be exported for use.
@@ -364,7 +355,7 @@ if [ -e "$PREDIX_MACHINE_HOME/machine/bundles/com.ge.dspmicro.machineadapter-opc
 fi
 
 # Setup keystore for OPC-UA Server key storage only if OPC-UA server bundle is present
-if [ -e "$PREDIX_MACHINE_HOME/machine/bundles/com.ge.dspmicro.opcua-server-16.2.0-SNAPSHOT.jar" ]; then
+if [ -e "$PREDIX_MACHINE_HOME/machine/bundles/com.ge.dspmicro.opcua-server-16.1.1.jar" ]; then
     if [ ! -e "$PREDIX_MACHINE_HOME/$OPCUA_SERVER_KEYSTORE_PATH" ]; then
         echo "Default OPC-UA Server keystore not found, generating a new one. WARNING: This may take several minutes on small devices"
         # We do no generate the password since it must be exported for use.

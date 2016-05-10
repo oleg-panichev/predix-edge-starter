@@ -1,13 +1,6 @@
 #!/bin/sh
 PROCESSOR=x86_64
 
-# GE Modified
-if [ `uname -m` = "armv6l" ]; then
-    PROCESSOR=arm_raspbian
-else
-    PROCESSOR=x86_64
-fi
-
 # dirname could be missing, so prevent changing dir to $HOME
 MBSA_DIR=`dirname "$0" 2>/dev/null`
 [ -n "$MBSA_DIR" ] && cd "$MBSA_DIR"
