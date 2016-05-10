@@ -162,6 +162,13 @@ fi
 
 # Get the Zone ID and URIs from the enviroment variables (for use when querying and ingesting data)
 
+if TIMESERIES_ZONE_HEADER_NAME=$(cf env $TEMP_APP | grep -m 1 zone-http-header-name | sed 's/"zone-http-header-name": "//' | sed 's/",//' | tr -d '[[:space:]]'); then
+	echo "TIMESERIES_ZONE_HEADER_NAME : $TIMESERIES_ZONE_HEADER_NAME"
+	__append_new_line_log "TIMESERIES_ZONE_HEADER_NAME copied from enviromental variables!" "$scriptRootDir"
+else
+	__error_exit "There was an error getting TIMESERIES_ZONE_HEADER_NAME..." "$scriptRootDir"
+fi
+
 if TIMESERIES_ZONE_ID=$(cf env $TEMP_APP | grep -m 1 zone-http-header-value | sed 's/"zone-http-header-value": "//' | sed 's/",//' | tr -d '[[:space:]]'); then
 	echo "TIMESERIES_ZONE_ID : $TIMESERIES_ZONE_ID"
 	__append_new_line_log "TIMESERIES_ZONE_ID copied from enviromental variables!" "$scriptRootDir"
@@ -303,7 +310,7 @@ fi
 __append_new_line_log "Setting predix machine configurations" "$scriptRootDir"
 rm -rf $scriptRootDir/PredixMachine
 unzip $scriptRootDir/PredixMachine.zip -d $scriptRootDir/PredixMachine
-$scriptRootDir/scripts/machineconfig.sh $pathFromCallingScript/scripts $trustedIssuerID $TIMESERIES_INGEST_URI $TIMESERIES_ZONE_ID
+$scriptRootDir/scripts/machineconfig.sh $pathFromCallingScript/scripts $trustedIssuerID $TIMESERIES_INGEST_URI $TIMESERIES_ZONE_HEADER_NAME $TIMESERIES_ZONE_ID
 
 echo "" > $scriptRootDir/config.txt
 echo "**********************SUCCESS*************************" >> $scriptRootDir/config.txt

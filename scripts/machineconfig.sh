@@ -49,12 +49,15 @@ set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/
 #mv com.ge.dspmicro.predixcloud.identity.config.tmp com.ge.dspmicro.predixcloud.identity.config
 websocket_config_file="$scriptRootDir/../$PREDIXMACHINEHOME/configuration/machine/com.ge.dspmicro.websocketriver.send-0.config"
 echo "Updating websocket river parameters in $websocket_config_file"
+
+websocket_headername_prop="com.ge.dspmicro.websocketriver.send.header.zone.name"
+set_property $websocket_config_file $websocket_headername_prop $4
 websocket_headervalue_prop="com.ge.dspmicro.websocketriver.send.header.zone.value"
-set_property $websocket_config_file $websocket_headervalue_prop \"$4\"
+set_property $websocket_config_file $websocket_headervalue_prop $5
 
 websocket_url_prop="com.ge.dspmicro.websocketriver.send.destination.url"
 
-set_property $websocket_config_file $websocket_url_prop \"$3\"
+set_property $websocket_config_file $websocket_url_prop $3
 
 #sed "s#<register name=.*dataType=.*address=.*registerType=.*description=.*/>#<register name=\"$ASSET_TAG_NOSPACE\" dataType=\"FLOAT\" address=\"0\" registerType=\"HOLDING\" description=\"temperature\"/>#" com.ge.dspmicro.machineadapter.modbus-0.xml > com.ge.dspmicro.machineadapter.modbus-0.xml.tmp
 #mv com.ge.dspmicro.machineadapter.modbus-0.xml.tmp com.ge.dspmicro.machineadapter.modbus-0.xml
