@@ -29,8 +29,7 @@ touch "$quickstartRootDir/quickstartlog.log"
 
 # Login into Cloud Foundy using the user input or password entered on request
 userSpace="`cf t | grep Space | awk '{print $2}'`"
-
-if [[ "$userSpace" -ne "$CF_SPACE" ]] ; then
+if [[ "$userSpace" != "$CF_SPACE" ]] ; then
 	__append_new_line_log "# quickstart.sh script started! #" "$quickstartRootDir"
 	echo -e "Welcome to the Predix Quick start script!\n"
 	echo -e "Be sure to set all your variables in the variables.sh file before you run quick start!\n"
