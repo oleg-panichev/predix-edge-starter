@@ -321,6 +321,8 @@ echo "UAA Admin Client ID: admin" >> $scriptRootDir/config.txt
 echo "UAA Admin Client Secret: $UAA_ADMIN_SECRET" >> $scriptRootDir/config.txt
 echo "UAA Generic Client ID: $UAA_CLIENTID_GENERIC" >> $scriptRootDir/config.txt
 echo "UAA Generic Client Secret: $UAA_CLIENTID_GENERIC_SECRET" >> $scriptRootDir/config.txt
+echo "UAA User ID: $UAA_USER_NAME" >> $scriptRootDir/config.txt
+echo "UAA User PASSWORD: $UAA_USER_PASSWORD" >> $scriptRootDir/config.txt
 echo "TimeSeries Ingest URL:  $TIMESERIES_INGEST_URI" >> $scriptRootDir/config.txt
 echo "TimeSeries Query URL:  $TIMESERIES_QUERY_URI" >> $scriptRootDir/config.txt
 echo "TimeSeries ZoneID: $TIMESERIES_ZONE_ID" >> $scriptRootDir/config.txt
