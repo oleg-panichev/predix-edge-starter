@@ -60,7 +60,7 @@ UAA_CLIENTID_GENERIC_SECRET="secret"
 ############# Predix Asset Configurations #############
 
 # Name of the "Asset" that is recorded to Predix Asset
-ASSET_TYPE="/asset/mydevice1"
+ASSET_TYPE="mydevice1"
 
 # Name of the tag (Asset name ex: Wind Turbine) you want to ingest to timeseries with. NO SPACES
 ASSET_TAG="mydevice1.temperature"
