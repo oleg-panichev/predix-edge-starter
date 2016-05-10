@@ -301,6 +301,7 @@ fi
 
 
 __append_new_line_log "Setting predix machine configurations" "$scriptRootDir"
+rm -rf $scriptRootDir/PredixMachine
 unzip $scriptRootDir/PredixMachine.zip -d $scriptRootDir/PredixMachine
 $scriptRootDir/scripts/machineconfig.sh $pathFromCallingScript/scripts $trustedIssuerID $TIMESERIES_INGEST_URI $TIMESERIES_ZONE_ID
 
