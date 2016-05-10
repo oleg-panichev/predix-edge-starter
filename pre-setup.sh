@@ -169,7 +169,7 @@ else
 	__error_exit "There was an error getting TIMESERIES_ZONE_ID..." "$scriptRootDir"
 fi
 
-if TIMESERIES_INGEST_URI=$(cf env $TEMP_APP | grep -m 1 uri | sed 's/"uri": "//' | sed 's/",//' | tr -d '[[:space:]]'); then
+if TIMESERIES_INGEST_URI=$(cf env $TEMP_APP | grep wss: | grep -m 1 uri | sed 's/"uri": "//' | sed 's/",//' | tr -d '[[:space:]]'); then
 	echo "TIMESERIES_INGEST_URI : $TIMESERIES_INGEST_URI"
 	__append_new_line_log " TIMESERIES_INGEST_URI copied from enviromental variables!" "$scriptRootDir"
 else
