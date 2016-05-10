@@ -66,7 +66,7 @@ EXTPRS="../../../../configuration/machine/predix.prs;../../predix/predix.home.pr
 MBS_SERVER_JAR="../../../lib/framework/com.prosyst.util.log.buffer.jar"
 VM_ARGS="-Dmbs.log.custom=com.prosyst.util.log.buffer.BufferedLogger -Dmbs.log.useEventThread=false -Dmbs.log.file.entriesThreshold=0"
 # turn on java security permissions in ../machine/bin/vms/policy.all. Comment out the line to turn it off.
-FWSECURITY=on
+#FWSECURITY=on
 
 # Add javax.servlet-api if it exists.
 if [ -e "$PREDIX_MACHINE_HOME/machine/bundles/javax.servlet-api-3.1.0.jar" ]; then 
