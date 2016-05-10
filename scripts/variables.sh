@@ -13,7 +13,7 @@ ALL_PROXY=""
 ############## Front End Configurations #############
 
 # Name for your Predix Cloud Front End Application - must be unique across whole cloud
-FRONT_END_APP_NAME="predix-node-js-starter-<your-name-here>"
+FRONT_END_APP_NAME="predix-nodejs-starter-<your-name-here>"
 
 ########### Predix Cloud (CF) Configurations ###########
 
