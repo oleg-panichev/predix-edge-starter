@@ -76,10 +76,10 @@ else
 	myProxyEnabled="false"
 fi
 
-set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.host" $myProxyHostValue
+#set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.host" $myProxyHostValue
 
-set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.port" $myProxyPortValue
+#set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.port" $myProxyPortValue
 
-set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.enabled" B$myProxyEnabled
+#set_property $pathFromCallingScript/../$PREDIXMACHINEHOME/configuration/machine/org.apache.http.proxyconfigurator-0.config "proxy.enabled" B$myProxyEnabled
 
 echo "Predix Machine configuration update complete"
