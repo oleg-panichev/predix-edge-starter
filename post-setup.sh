@@ -16,6 +16,7 @@ CWD="`pwd`"
 cd ../predix-edge-starter
 if [ "$(uname -s)" == "Darwin" ]
 then
+	cp $scriptRootDir/scripts/pm_background.sh $PREDIXMACHINEHOME/machine/bin/predix
 	__append_new_line_log "Zipping up the configured Predix Machine..." "$scriptRootDir"
 	rm -rf $scriptRootDir/PredixMachineContainer.zip
 	if zip -r $scriptRootDir/PredixMachineContainer.zip $PREDIXMACHINEHOME > zipoutput.log; then
